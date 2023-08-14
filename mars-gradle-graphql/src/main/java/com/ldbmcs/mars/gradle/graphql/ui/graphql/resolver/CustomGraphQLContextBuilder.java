@@ -24,8 +24,6 @@ public class CustomGraphQLContextBuilder implements GraphQLServletContextBuilder
     @Autowired
     private AuthTokenDomainService authTokenDomainService;
 
-    private static final String BEARER = "Bearer ";
-
     @Override
     public GraphQLKickstartContext build() {
         return new DefaultGraphQLContext(buildDataLoaderRegistry());
@@ -39,10 +37,9 @@ public class CustomGraphQLContextBuilder implements GraphQLServletContextBuilder
             return customGraphQLContext;
         }
 
-        String token = authorization.replace(BEARER, "");
-        User currentUser = authTokenDomainService.parse(token);
+        User currentUser = authTokenDomainService.parse(authorization);
         if (currentUser != null) {
-            CurrentContext.setAuthToken(token);
+            CurrentContext.setAuthToken(authorization);
             CurrentContext.setUser(currentUser);
             customGraphQLContext.addCurrentAccountUser(currentUser);
         }
@@ -52,10 +49,10 @@ public class CustomGraphQLContextBuilder implements GraphQLServletContextBuilder
     @Override
     public GraphQLKickstartContext build(Session session, HandshakeRequest handshakeRequest) {
         return DefaultGraphQLWebSocketContext.createWebSocketContext()
-                .with(session)
-                .with(handshakeRequest)
-                .with(buildDataLoaderRegistry())
-                .build();
+            .with(session)
+            .with(handshakeRequest)
+            .with(buildDataLoaderRegistry())
+            .build();
     }
 
     private DataLoaderRegistry buildDataLoaderRegistry() {

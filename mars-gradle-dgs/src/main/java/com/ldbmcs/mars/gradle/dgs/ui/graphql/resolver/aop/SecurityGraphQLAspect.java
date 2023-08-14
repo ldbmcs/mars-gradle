@@ -3,7 +3,6 @@ package com.ldbmcs.mars.gradle.dgs.ui.graphql.resolver.aop;
 import com.ldbmcs.mars.gradle.dgs.core.domain.user.models.User;
 import com.ldbmcs.mars.gradle.dgs.core.shared.Errors;
 import com.ldbmcs.mars.gradle.dgs.infra.context.CurrentContext;
-import graphql.GraphQLError;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
