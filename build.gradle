@@ -1,0 +1,86 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.2'
+    id 'io.spring.dependency-management' version '1.1.2'
+    id 'groovy'
+    id 'jacoco'
+}
+
+group = 'com.ldbmcs'
+version = '1.0-SNAPSHOT'
+
+apply from: "gradle/check.gradle"
+
+checkstyle {
+    toolVersion = 8.23
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: "checkstyle"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.apache.groovy:groovy'
+        implementation "org.springframework.boot:spring-boot-starter-data-redis"
+        implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive"
+        implementation 'io.sentry:sentry-spring-boot-starter:6.14.0'
+        implementation 'cn.hutool:hutool-all:5.8.11'
+        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
+        implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.3.1'
+        implementation "org.springframework:spring-aspects"
+        implementation 'org.flywaydb:flyway-mysql'
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        runtimeOnly 'com.mysql:mysql-connector-j'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation "org.spockframework:spock-core:2.2-M1-groovy-4.0"
+        testImplementation "org.spockframework:spock-spring:2.2-M1-groovy-4.0"
+    }
+
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport // report is always generated after tests run
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = false
+            csv.required = false
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    minimum = 0
+                }
+            }
+            rule {
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = 0
+                }
+            }
+            rule {
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0
+                }
+            }
+        }
+    }
+}

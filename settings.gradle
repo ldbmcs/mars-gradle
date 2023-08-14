@@ -1,0 +1,3 @@
+rootProject.name = 'mars-gradle'
+include 'mars-gradle-graphql'
+include 'mars-gradle-dgs'

@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  dev:
+    image: openjdk:17
+    links:
+      - db
+      - redis
+    command: echo 'dev environment started'
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: 'mars-gradle-graphql'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3307:3306'
+    volumes:
+      - mars-gradle-graphql-mysql:/var/lib/mysql
+
+  redis:
+    image: redis
+    ports:
+      - "6380:6379"
+
+volumes:
+  mars-gradle-graphql-mysql:
