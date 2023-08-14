@@ -3,16 +3,14 @@ package com.ldbmcs.mars.gradle.graphql.core.domain.auth.service;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.ldbmcs.mars.gradle.graphql.core.domain.user.models.User;
 import com.ldbmcs.mars.gradle.graphql.core.domain.user.service.UserDomainService;
-import com.ldbmcs.mars.gradle.graphql.core.shared.Errors;
 import com.ldbmcs.mars.gradle.graphql.infra.redis.RedisTemplateHelper;
+import java.time.Duration;
+import java.util.Locale;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
-import java.util.Locale;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -50,7 +48,7 @@ public class AuthTokenDomainService {
         String key = getSessionKey(token);
         return Optional.ofNullable(redisTemplateHelper.get(key))
                 .map(userId -> userDomainService.selectById(String.valueOf(userId)))
-                .orElseThrow(Errors::unauthorized);
+            .orElse(null);
     }
 
     private String getSessionKey(String token) {
